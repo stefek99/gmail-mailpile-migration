@@ -12,7 +12,7 @@ Exporting data form Gmail is officially supported:
 
 ## Inbox can contain 100k+ messages
 
-![splited](http://i.imgur.com/PKIZLJE)
+![splited](http://i.imgur.com/PKIZLJE.png)
 
 Simple ruby script **script1.rb** to parse ```mbox``` format and dump messages to individual files:
 * https://support.google.com/accounts/answer/3024195?hl=en-GB#gmail
@@ -23,7 +23,7 @@ Simple ruby script **script1.rb** to parse ```mbox``` format and dump messages t
 
 ## And most of the content is simply crap
 
-![crap](http://i.imgur.com/cxtBEag)
+![crap](http://i.imgur.com/cxtBEag.png)
 
 (various headers and totally unused fields)
 
@@ -65,7 +65,7 @@ I tried using http://gmvault.org/ in parallel but never finished:
 * issues with crashing
 * issues with auth
 * issues with timeouts
-![gmvault](http://i.imgur.com/8LV7fPb)
+![gmvault](http://i.imgur.com/8LV7fPb.png)
 
 Since there is official and supported method of downloading inbox there is no need to use gmvault.
 
