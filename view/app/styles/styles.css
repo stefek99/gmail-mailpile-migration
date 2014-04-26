@@ -1,0 +1,14 @@
+.cleaner {
+	height: 0px;
+	display: block;
+	clear: both;
+}
+pre.raw {
+	width: 500px;
+	height: 500px;
+	float: left;
+}
+
+div.breakdown {
+	float: left;
+}

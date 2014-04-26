@@ -5,6 +5,7 @@ var cors = require('cors');
 
 app.configure(function() {
 	app.use(express.static(__dirname + '/static'));
+	app.use(cors());
 });
 
 app.get('/index.html', function(req, res) {
@@ -22,6 +23,16 @@ app.get('/getfiles', function(req, res) {
 		}
 		res.send(files);
 	})
+});
+
+app.get('/getitem', function(req, res) {
+	var filename = req.query.id;
+	console.log('/getitem ' + filename);
+
+	fs.readFile("../mail/" + filename, function (err, data) {
+	  if (err) throw err;
+	  res.send(data);
+	});
 });
 
 app.listen(3002);

@@ -9,7 +9,16 @@ app.factory('fileservice', ["$http", "$q", function($http, $q) {
         return defer.promise;
     }
 
+    var getitem = function(item) {
+        return $http({
+            url : "/getitem",
+            method : "GET",
+            params : {id : item}
+        });
+    }
+
     return {
-        getfiles : getfiles
+        getfiles : getfiles,
+        getitem : getitem
     }
 }]);
