@@ -7,6 +7,7 @@ pre.raw {
 	width: 500px;
 	height: 500px;
 	float: left;
+	overflow: scroll;
 }
 
 div.breakdown {
