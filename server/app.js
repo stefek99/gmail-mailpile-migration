@@ -30,8 +30,12 @@ app.get('/getitem', function(req, res) {
 	console.log('/getitem ' + filename);
 
 	fs.readFile("../mail/" + filename, function (err, data) {
-	  if (err) throw err;
-	  res.send(data);
+		if(err) {
+			console.log(err);
+			res.send(err);
+			return;
+		}
+		res.send(data);
 	});
 });
 

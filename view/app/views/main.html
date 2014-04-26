@@ -1,6 +1,6 @@
 <ul>
     <li ng-repeat="item in data | startFrom:currentPage*pageSize | limitTo:pageSize">
-        <a href="" ng-click="getitem(item)">{{item}}</a>
+        <a ng-click="getitem(item)" href="#{{item}}">{{item}}</a>
     </li>
 </ul>
 <button ng-disabled="currentPage == 0" ng-click="currentPage=currentPage-1">
