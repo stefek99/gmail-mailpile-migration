@@ -2,8 +2,11 @@ var express = require('express');
 var app = express();
 var fs = require('fs');
 var cors = require('cors');
-var unwantedheaders = require("./unwantedheaders");
+var headers = require("./headers");
 var _ = require('underscore');
+
+
+var TEMP_unwantedheaders = headers.unwanted.concat(headers.keep);
 
 app.configure(function() {
 	app.use(express.static(__dirname + '/static'));
@@ -30,7 +33,11 @@ app.get('/getfiles', function(req, res) {
 var process = function(data) {
 	var pairs = []; // key value pairs
 	var pairregex = /^[a-zA-Z0-9-]+: /;
+	var boundaryregex = /boundary="[a-zA-Z0-9-=_]+"/;
 	var currentpair = null;
+	var boundary = null;
+	var boundaryStartFound = false;
+	var mode = "normal";
 
 	var lines = data.split("\r\n");
 
@@ -40,22 +47,48 @@ var process = function(data) {
 
 	for (var i=1; i<lines.length; i++) {
 		var line = lines[i];
-		var matchresult = line.match(pairregex);
-		if(matchresult != null) {
-			if (currentpair != null) {
-				pairs.push(currentpair);
-				currentpair = null;
-			}
-			currentpair = { "key" : matchresult[0].slice(0,-2), "value" : "" };
-			var splitted = line.split(matchresult[0]);
-			currentpair.value += splitted[1];
-		} else {
-			currentpair.value += line;
+
+		switch(mode) {
+
+			case "normal" :
+				var matchresult = line.match(pairregex);
+				if(matchresult != null) {
+					if (currentpair != null) {
+						pairs.push(currentpair);
+						currentpair = null;
+					}
+					var key = matchresult[0].slice(0,-2);
+
+					if (key === "Content-Type" && line.indexOf("multipart/alternative" !== -1) && line.match(boundaryregex) != null) {
+						boundary = line.match(boundaryregex)[0].substr(10, line.match(boundaryregex)[0].length-11);
+						mode = "boundary";
+						console.log("boundary: " + boundary + " at line: " + i);
+					}
+
+					currentpair = { "key" : key, "value" : "" };
+					var splitted = line.split(matchresult[0]);
+					currentpair.value += splitted[1];
+				} else {
+					currentpair.value += line;
+				}
+				break;
+
+			case "boundary" :
+				if (line.indexOf(boundary) !== -1) {
+					if (boundaryStartFound) {
+						boundaryStartFound = false;
+						mode = "normal";
+						console.log("end at line: " + i);
+					} else {
+						boundaryStartFound = true;
+					}
+				}
+				break;
 		}
 	}
 
 	// strip unwanted headers
-	pairs = pairs.filter(function(pair) { return unwantedheaders.indexOf(pair.key) === -1; })
+	// pairs = pairs.filter(function(pair) { return TEMP_unwantedheaders.indexOf(pair.key) === -1; })
 
 	return pairs;
 }
