@@ -2,6 +2,8 @@ var express = require('express');
 var app = express();
 var fs = require('fs');
 var cors = require('cors');
+var unwantedheaders = require("./unwantedheaders");
+var _ = require('underscore');
 
 app.configure(function() {
 	app.use(express.static(__dirname + '/static'));
@@ -44,14 +46,16 @@ var process = function(data) {
 				pairs.push(currentpair);
 				currentpair = null;
 			}
-			currentpair = { "key" : matchresult[0], "value" : "" };
+			currentpair = { "key" : matchresult[0].slice(0,-2), "value" : "" };
 			var splitted = line.split(matchresult[0]);
 			currentpair.value += splitted[1];
 		} else {
 			currentpair.value += line;
 		}
-
 	}
+
+	// strip unwanted headers
+	pairs = pairs.filter(function(pair) { return unwantedheaders.indexOf(pair.key) === -1; })
 
 	return pairs;
 }

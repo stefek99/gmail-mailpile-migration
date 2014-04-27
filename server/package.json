@@ -8,6 +8,7 @@
     "cors": "*",
     "mkdirp": "*",
     "request": "*",
-    "cheerio": "*"
+    "cheerio": "*",
+    "underscore": "*"
   }
 }
