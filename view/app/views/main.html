@@ -13,8 +13,5 @@
 
 <hr>
 
-<pre class="raw">{{ itemdata }}</pre>
-<div class="breakdown">
-  <div>From: xxx</div>
-  <div>To: yyy</div>
-</div>
+<pre class="raw">{{ itemdata.raw }}</pre>
+<div class="breakdown" ng-bind-html="displayprocessed() | unsafe"></div>

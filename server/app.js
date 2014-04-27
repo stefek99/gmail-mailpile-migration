@@ -25,17 +25,51 @@ app.get('/getfiles', function(req, res) {
 	})
 });
 
+var process = function(data) {
+	var pairs = []; // key value pairs
+	var pairregex = /^[a-zA-Z0-9-]+: /;
+	var currentpair = null;
+
+	var lines = data.split("\r\n");
+
+	// special treating of the first line
+	var splitted = lines[0].split("From ");
+	pairs.push({"key" : "From", "value" : splitted[1]});
+
+	for (var i=1; i<lines.length; i++) {
+		var line = lines[i];
+		var matchresult = line.match(pairregex);
+		if(matchresult != null) {
+			if (currentpair != null) {
+				pairs.push(currentpair);
+				currentpair = null;
+			}
+			currentpair = { "key" : matchresult[0], "value" : "" };
+			var splitted = line.split(matchresult[0]);
+			currentpair.value += splitted[1];
+		} else {
+			currentpair.value += line;
+		}
+
+	}
+
+	return pairs;
+}
+
 app.get('/getitem', function(req, res) {
 	var filename = req.query.id;
 	console.log('/getitem ' + filename);
 
-	fs.readFile("../mail/" + filename, function (err, data) {
+	fs.readFile("../mail/" + filename, "utf8", function (err, data) {
 		if(err) {
 			console.log(err);
 			res.send(err);
 			return;
 		}
-		res.send(data);
+
+		var processed = process(data); 
+
+		res.send({raw: data, processed: processed});
 	});
 });
 

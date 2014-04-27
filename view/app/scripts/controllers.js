@@ -1,4 +1,4 @@
-app.controller("ctrl", ["$scope", "$routeParams", "$route", "fileservice", function($scope, $routeParams, $route, fileservice) {
+app.controller("ctrl", ["$scope", "$routeParams", "$route", "fileservice", "$sce", function($scope, $routeParams, $route, fileservice, $sce) {
     var messageID = $routeParams.id;
     $scope.pageSize = 10;
     $scope.currentPage = Math.floor(parseInt(messageID, 10) / 10);
@@ -23,8 +23,21 @@ app.controller("ctrl", ["$scope", "$routeParams", "$route", "fileservice", funct
             $scope.itemdata = actual.data;
         })
     }
-
-    
     $scope.getitem(messageID);
+
+    $scope.displayprocessed = function() {
+        var result = [];
+        if ($scope.itemdata) {
+            for (var i=0; i<$scope.itemdata.processed.length; i++) {
+                var pair = $scope.itemdata.processed[i];
+                result.push("<span class='line'>" +
+                              "<b>" + pair.key + "</b> " + pair.value +
+                            "</span>");
+            }
+            return result.join('');
+        } else {
+            return "no data yet;"
+        }
+    }
 
 }]);

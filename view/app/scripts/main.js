@@ -10,7 +10,7 @@ app.filter('startFrom', function() {
     }
 });
 
-app.config(function ($routeProvider) {
+app.config(["$routeProvider", function ($routeProvider) {
   $routeProvider
     .when('/', {
       templateUrl: 'views/main.html',
@@ -23,4 +23,10 @@ app.config(function ($routeProvider) {
     .otherwise({
       redirectTo: '/'
     });
-});
+}]);
+
+app.filter('unsafe', ["$sce", function($sce) {
+    return function(val) {
+        return $sce.trustAsHtml(val);
+    };
+}]);
