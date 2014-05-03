@@ -20,24 +20,8 @@ app.controller("ctrl", ["$scope", "$routeParams", "$route", "fileservice", "$sce
 
     $scope.getitem = function(item) {
         fileservice.getitem(item).then(function(actual) {
-            $scope.itemdata = actual.data;
+            $scope.response = actual.data;
         })
     }
     $scope.getitem(messageID);
-
-    $scope.displayprocessed = function() {
-        var result = [];
-        if ($scope.itemdata) {
-            for (var i=0; i<$scope.itemdata.processed.length; i++) {
-                var pair = $scope.itemdata.processed[i];
-                result.push("<span class='line'>" +
-                              "<b>" + pair.key + "</b> " + pair.value +
-                            "</span>");
-            }
-            return result.join('');
-        } else {
-            return "no data yet;"
-        }
-    }
-
 }]);

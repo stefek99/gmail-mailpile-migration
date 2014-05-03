@@ -9,6 +9,7 @@
     "mkdirp": "*",
     "request": "*",
     "cheerio": "*",
-    "underscore": "*"
+    "underscore": "*",
+    "mailparser": "*"
   }
 }
