@@ -1,3 +1,7 @@
+# Current state
+
+[![youtube](http://i.imgur.com/yxXOJ4P.png)](https://www.youtube.com/watch?v=UfeBVd12-SM)
+
 # Gmail to mailpile migration
 
 Exporting data form Gmail is officially supported:
